@@ -2,7 +2,7 @@
 //  Fintrack_AppApp.swift
 //  Fintrack_App
 //
-//  Created by csuftitan on 3/25/25.
+//  Created by Alisa Gao on 3/25/25.
 //
 import SwiftUI
 import FirebaseCore
