@@ -13,7 +13,7 @@ struct RoundedTextField: View {
     var isSecure: Bool=false // hide the text or not (like entering password)
     
     var body: some View {
-        Group{
+        VStack{
             if isSecure{
                 SecureField(placeHolder, text: $text)
                     .foregroundColor(.gray)

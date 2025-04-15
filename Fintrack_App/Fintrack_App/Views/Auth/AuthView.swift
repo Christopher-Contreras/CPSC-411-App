@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//import FirebaseAuth
+import FirebaseAuth
 
 struct AuthView: View {
     @State var isLoggedIn: Bool = true
@@ -41,8 +41,9 @@ struct LoginView: View {
                 RoundedTextField(placeHolder: "Password", text: $password, isSecure: true)
             
             Button {
-                authViewModel.login(email: email, password: password)
-                
+                Task{
+                    await authViewModel.login(email: email, password: password)
+                }
             } label: {
                 Text("Log In")
                     .frame(width: 280, height: 50)
@@ -99,7 +100,9 @@ struct SignupView: View {
                 RoundedTextField(placeHolder: "Password", text: $password, isSecure: true)
             
             Button {
-                authViewModel.signup(email: email, password: password, userName: userName)
+                Task{
+                    await authViewModel.signup(email: email, password: password, userName: userName)
+                }
                 
             } label: {
                 Text("Sign Up")
@@ -134,7 +137,7 @@ struct SignupView: View {
     }
 }
 
-#Preview{
-    AuthView()
-}
-
+//#Preview{
+//    AuthView()
+//}
+//
