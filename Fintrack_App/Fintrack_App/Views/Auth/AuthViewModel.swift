@@ -13,7 +13,6 @@ import FirebaseFirestore
 @MainActor
 class AuthViewModel: ObservableObject {
     @Published var isAuthenticated = false
-    @Published var errorMessage: String? = nil
     
     init() {
         // If user is already logged in (session persists)
@@ -22,7 +21,7 @@ class AuthViewModel: ObservableObject {
     
     
     
-    func login(email: String, password: String) async {
+    func login(email: String, password: String) async throws{
         
         // Skipped calling firebase in preview
         guard !ProcessInfo().isPreview else {
@@ -31,18 +30,14 @@ class AuthViewModel: ObservableObject {
         }
         
         // log in
-        do{
-            try await AuthService.logIn(email: email, password: password)
-        }
-        catch{
-            errorMessage = error.localizedDescription
-        }
+        try await AuthService.logIn(email: email, password: password)
         
     }
     
     
     
-    func signup(email: String, password: String, userName: String) async {
+    func signup(email: String, password: String, userName: String) async throws {
+        
         // skip preview
         guard !ProcessInfo().isPreview else {
             print("Signup skipped in preview.")
@@ -51,39 +46,32 @@ class AuthViewModel: ObservableObject {
         
         // sign up for new user
         do{
-            try await AuthService.signUp(email: email, password: password, userName: userName)
+            try await
+            AuthService.signUp(email: email, password: password, userName: userName)
             isAuthenticated=true
-        }
-        catch{
-            errorMessage=error.localizedDescription
-            return
-        }
-        
-        
-        // add to user collection
-        do{
+            
+            // add to user collection
             let newUser = User(
                 email: email, group: [], userName: userName
             )
             
             try await UserService.addUser(user: newUser)
+            
         }
         catch{
-            print("❌ Error: \(error.localizedDescription)")
+            throw error
         }
     }
     
     
-    
-    func logout() {
+    func logout() async throws {
         do {
-            try Auth.auth().signOut()
+            try await AuthService.logOut()
             isAuthenticated = false
         } catch {
-            print("❌ Error signing out: \(error.localizedDescription)")
+            throw error
         }
     }
-    
 }
 
 
