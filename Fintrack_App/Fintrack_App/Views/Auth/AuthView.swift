@@ -42,7 +42,15 @@ struct LoginView: View {
             
             Button {
                 Task{
-                    await authViewModel.login(email: email, password: password)
+                    do{
+                        try await authViewModel.login(email: email, password: password)
+                        print("Log in successed")
+                    }
+                    catch
+                    {
+                        // TODO: handle error
+                        print(error.localizedDescription)
+                    }
                 }
             } label: {
                 Text("Log In")
@@ -101,7 +109,15 @@ struct SignupView: View {
             
             Button {
                 Task{
-                    await authViewModel.signup(email: email, password: password, userName: userName)
+                    do{
+                        try await authViewModel.signup(email: email, password: password, userName: userName)
+                        print("sign up successed")
+                    }
+                    catch
+                    {
+                        // TODO: handle error
+                        print(error.localizedDescription)
+                    }
                 }
                 
             } label: {
