@@ -10,8 +10,10 @@ import FirebaseFirestore
 
 struct User: Codable, Identifiable {
     @DocumentID var id: String? = nil
+
     var email: String
-    var group: [String]
     var userName: String
+    var group: [String] = [] // groupIDs
     var createdAt: Timestamp? = nil
+    // contains subcollection UserExpense
 }

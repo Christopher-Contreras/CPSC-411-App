@@ -10,8 +10,11 @@ import FirebaseFirestore
 
 struct Group: Codable, Identifiable {
     @DocumentID var id: String? = nil
+
     var groupName: String
-    var groupMembers: [String] // array of string
-    var balance: [String:[String: Double]]
+    var groupMembers: [String] // userIDs
+    var balance: [String: [String: Double]] // who owes who
+    
     var createdAt: Timestamp? = nil
+    // contains subcollection expenses
 }

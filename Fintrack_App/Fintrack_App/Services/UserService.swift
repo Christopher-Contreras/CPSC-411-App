@@ -6,20 +6,27 @@
 //
 
 import FirebaseFirestore
-import Foundation
 
 struct UserService {
-    static func addUser(user:User) async throws {
-        let data:[String:Any]=[
-            "email":user.email,
-            "group":user.group,
-            "userName":user.userName,
-            "createdAt":FieldValue.serverTimestamp()
-        ]
+    
+    
+    static func addUser(user: User) async throws {
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document()
         
+        var newUser = user
+        newUser.id = docRef.documentID
         
-        let db=Firestore.firestore()
-        try await db.collection("user").addDocument(data: data)
+        let encoded = try Firestore.Encoder().encode(newUser)
+        try await docRef.setData(encoded)
+    }
+    
+    
+    static func addUserExpense(userId: String, expense: UserExpense) async throws {
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(userId).collection("expenses").document()
         
+        let encoded = try Firestore.Encoder().encode(expense)
+        try await docRef.setData(encoded)
     }
 }
