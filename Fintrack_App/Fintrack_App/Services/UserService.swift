@@ -9,24 +9,36 @@ import FirebaseFirestore
 
 struct UserService {
     
-    
-    static func addUser(user: User) async throws {
+    static func addUser(user: User, completion: @escaping (Error?) -> Void) {
+        
         let db = Firestore.firestore()
         let docRef = db.collection("users").document()
         
         var newUser = user
         newUser.id = docRef.documentID
         
-        let encoded = try Firestore.Encoder().encode(newUser)
-        try await docRef.setData(encoded)
+        do {
+            let encoded = try Firestore.Encoder().encode(newUser)
+            docRef.setData(encoded) { error in
+                completion(error) // notify caller of success or failure
+            }
+        } catch {
+            completion(error) // encoding failed
+        }
     }
     
-    
-    static func addUserExpense(userId: String, expense: UserExpense) async throws {
+    static func addUserExpense(userId: String, expense: UserExpense, completion: @escaping (Error?) -> Void) {
+        
         let db = Firestore.firestore()
         let docRef = db.collection("users").document(userId).collection("expenses").document()
         
-        let encoded = try Firestore.Encoder().encode(expense)
-        try await docRef.setData(encoded)
+        do {
+            let encoded = try Firestore.Encoder().encode(expense)
+            docRef.setData(encoded) { error in
+                completion(error) // notify caller of success or failure
+            }
+        } catch {
+            completion(error) // encoding failed
+        }
     }
 }

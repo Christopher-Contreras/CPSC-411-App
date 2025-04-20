@@ -9,50 +9,62 @@
 import Foundation
 import FirebaseFirestore
 
-// TODO: test all of them it should be good though
 struct GroupService {
-
-    static func addGroup(_ group: Group) async throws{
+    
+    static func addGroup(_ group: Group, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         let docRef = db.collection("group").document()
-
+        
         var newGroup = group
         newGroup.id = docRef.documentID
-
-        let encoded = try Firestore.Encoder().encode(newGroup)
         
-        try await docRef.setData(encoded)
+        do {
+            let encoded = try Firestore.Encoder().encode(newGroup)
+            docRef.setData(encoded) { error in
+                completion(error)
+            }
+        } catch {
+            completion(error)
+        }
     }
-
-
-    static func addGroupExpense(groupID: String, expense: GroupExpense) async throws {
+    
+    static func addGroupExpense(groupID: String, expense: GroupExpense, completion: @escaping (Error?) -> Void) {
+        
         let db = Firestore.firestore()
         let docRef = db.collection("group").document(groupID).collection("expenses").document()
-
-        let encoded = try Firestore.Encoder().encode(expense)
         
-        try await docRef.setData(encoded)
+        do {
+            let encoded = try Firestore.Encoder().encode(expense)
+            docRef.setData(encoded) { error in
+                completion(error)
+            }
+        } catch {
+            completion(error)
+        }
     }
-
-
-    static func addGroupMember(groupID: String, memberID: String) async throws {
+    
+    static func addGroupMember(groupID: String, memberID: String, completion: @escaping (Error?) -> Void) {
+        
         let db = Firestore.firestore()
-        try await db.collection("group").document(groupID).updateData([
+        db.collection("group").document(groupID).updateData([
             "groupMembers": FieldValue.arrayUnion([memberID])
-        ])
+        ]) { error in
+            completion(error)
+        }
     }
-
-    // calculate and update total balance
-    static func updateGroupBalance(groupID: String)  {
-        // TODO: Fetch all expenses and recalculate balances
-     
-    }
-
-    // upate group name
-    static func changeGroupName(groupID: String, newName: String) async throws {
+    
+    static func changeGroupName(groupID: String, newName: String, completion: @escaping (Error?) -> Void) {
+        
         let db = Firestore.firestore()
-        try await db.collection("group").document(groupID).updateData([
+        db.collection("group").document(groupID).updateData([
             "groupName": newName
-        ])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    static func updateGroupBalance(groupID: String) {
+        // TODO: Fetch expenses from /group/{groupID}/expenses
+        
     }
 }
