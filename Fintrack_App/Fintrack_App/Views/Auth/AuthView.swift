@@ -45,10 +45,10 @@ struct LoginView: View {
                     do{
                         try await authViewModel.login(email: email, password: password)
                         print("Log in successed")
+                        // TODO: Jump to user's expense page
                     }
                     catch
                     {
-                        // TODO: handle error
                         print(error.localizedDescription)
                     }
                 }
@@ -102,7 +102,6 @@ struct SignupView: View {
                 Spacer()
             }
             .padding()
-            
                 RoundedTextField(placeHolder: "Email", text: $email, isSecure: false)
                 RoundedTextField(placeHolder: "User Name", text: $userName, isSecure: false)
                 RoundedTextField(placeHolder: "Password", text: $password, isSecure: true)
@@ -112,10 +111,10 @@ struct SignupView: View {
                     do{
                         try await authViewModel.signup(email: email, password: password, userName: userName)
                         print("sign up successed")
+                        loginPage = true
                     }
                     catch
                     {
-                        // TODO: handle error
                         print(error.localizedDescription)
                     }
                 }
