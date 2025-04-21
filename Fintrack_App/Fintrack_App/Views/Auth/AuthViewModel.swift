@@ -30,7 +30,13 @@ class AuthViewModel: ObservableObject {
         }
         
         // log in
-        try await AuthService.logIn(email: email, password: password)
+        do{
+            try await AuthService.logIn(email: email, password: password)
+            isAuthenticated=true
+        }
+        catch {
+            throw error
+        }
         
     }
     
@@ -48,7 +54,7 @@ class AuthViewModel: ObservableObject {
         do{
             try await
             AuthService.signUp(email: email, password: password, userName: userName)
-            isAuthenticated=true
+            
             
             // add to user collection
             let newUser = User(

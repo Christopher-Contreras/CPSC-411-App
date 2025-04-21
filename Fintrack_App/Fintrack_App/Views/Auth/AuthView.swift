@@ -11,12 +11,32 @@ import FirebaseAuth
 struct AuthView: View {
     @State var isLoggedIn: Bool = true
     @State var loginPage: Bool = true
+    @StateObject var authViewModel = AuthViewModel()
     
     var body: some View {
+        
         VStack{
-            if loginPage{ LoginView(loginPage: $loginPage) } else { SignupView(loginPage: $loginPage) }
+            if (authViewModel.isAuthenticated) {
+                
+                // TODO: to the main app interface
+                Text("is authenticated")
+            }
+            else {
+                if (loginPage){
+                    LoginView(loginPage: $loginPage)
+                }
+                else {
+                    SignupView(loginPage: $loginPage)
+                }
+            }
+        }
+        .onAppear {
+            Task {
+                try await authViewModel.logout()
+            }
         }
         .padding()
+        .environmentObject(authViewModel)
     }
 }
 
@@ -24,7 +44,7 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @Binding var loginPage: Bool
-    @StateObject var authViewModel = AuthViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     
     var body: some View {
         VStack{
@@ -37,15 +57,16 @@ struct LoginView: View {
             }
             .padding()
             
-                RoundedTextField(placeHolder: "Email", text: $email, isSecure: false)
-                RoundedTextField(placeHolder: "Password", text: $password, isSecure: true)
+            RoundedTextField(placeHolder: "Email", text: $email, isSecure: false)
+            RoundedTextField(placeHolder: "Password", text: $password, isSecure: true)
             
             Button {
                 Task{
                     do{
                         try await authViewModel.login(email: email, password: password)
+                        loginPage = false
                         print("Log in successed")
-                        // TODO: Jump to user's expense page
+                        // TODO: to the main app interface
                     }
                     catch
                     {
@@ -79,7 +100,7 @@ struct LoginView: View {
             }
             .font(.footnote)
             .padding()
-      
+            
         }
         
     }
@@ -90,7 +111,7 @@ struct SignupView: View {
     @State private var password: String = ""
     @State private var userName: String = ""
     @Binding var loginPage: Bool
-    @StateObject var authViewModel = AuthViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     
     var body: some View {
         VStack{
@@ -102,9 +123,9 @@ struct SignupView: View {
                 Spacer()
             }
             .padding()
-                RoundedTextField(placeHolder: "Email", text: $email, isSecure: false)
-                RoundedTextField(placeHolder: "User Name", text: $userName, isSecure: false)
-                RoundedTextField(placeHolder: "Password", text: $password, isSecure: true)
+            RoundedTextField(placeHolder: "Email", text: $email, isSecure: false)
+            RoundedTextField(placeHolder: "User Name", text: $userName, isSecure: false)
+            RoundedTextField(placeHolder: "Password", text: $password, isSecure: true)
             
             Button {
                 Task{
@@ -146,7 +167,7 @@ struct SignupView: View {
             }
             .font(.footnote)
             .padding()
-      
+            
         }
         
     }
