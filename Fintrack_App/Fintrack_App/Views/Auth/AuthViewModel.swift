@@ -55,7 +55,12 @@ class AuthViewModel: ObservableObject {
                 email: email, userName: userName, group: []
             )
             
-            try await UserService.addUser(user: newUser)
+            UserService.addUser(user: newUser) {
+                error in
+                if let error = error {
+                    print("Faile to add new user: \(error)")
+                }
+            }
             
         }
         catch{
