@@ -12,8 +12,8 @@ struct Group: Codable, Identifiable {
     @DocumentID var id: String? = nil
 
     var groupName: String
-    var groupMembers: [String] // userIDs
-    var balance: [String: [String: Double]] // who owes who
+    var groupMembers: [String:String] // [userID : userName]
+    var balance: [String: Double] // ["A to B" : amount]
     
     var createdAt: Timestamp? = nil
     // contains subcollection expenses

@@ -1,70 +1,138 @@
-//
-//  GroupService.swift
-//  Fintrack_App
-//
-//  Created by Alisa Gao on 4/14/25.
-//
-
-
 import Foundation
 import FirebaseFirestore
 
 struct GroupService {
     
-    static func addGroup(_ group: Group, completion: @escaping (Error?) -> Void) {
+    static func addGroup(group: Group) throws {
         let db = Firestore.firestore()
         let docRef = db.collection("groups").document()
-        
-        var newGroup = group
-        newGroup.id = docRef.documentID
-        
-        do {
-            let encoded = try Firestore.Encoder().encode(newGroup)
-            docRef.setData(encoded) { error in
-                completion(error)
-            }
-        } catch {
-            completion(error)
-        }
+        try docRef.setData(from: group)
     }
     
-    static func addGroupExpense(groupID: String, expense: GroupExpense, completion: @escaping (Error?) -> Void) {
-        
+    static func addGroupExpense(groupID: String, expense: GroupExpense) throws {
         let db = Firestore.firestore()
         let docRef = db.collection("groups").document(groupID).collection("expenses").document()
-        
-        do {
-            let encoded = try Firestore.Encoder().encode(expense)
-            docRef.setData(encoded) { error in
-                completion(error)
-            }
-        } catch {
-            completion(error)
-        }
+        try docRef.setData(from: expense)
     }
     
-    static func addGroupMember(groupID: String, memberID: String, completion: @escaping (Error?) -> Void) {
-        
+    static func deleteGroupExpense(groupID: String, expenseID: String) async throws {
         let db = Firestore.firestore()
-        db.collection("groups").document(groupID).updateData([
+        try await db.collection("groups")
+            .document(groupID)
+            .collection("expenses")
+            .document(expenseID)
+            .delete()
+    }
+    
+    static func getGroupAllExpense(groupID: String) async throws -> [GroupExpense] {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("groups").document(groupID).collection("expenses")
+        let snapshot = try await collectionRef.getDocuments()
+        let expenses = try snapshot.documents.compactMap { document in
+            try document.data(as: GroupExpense.self)
+        }
+        return expenses
+    }
+    
+    static func updateGroupExpense(groupID: String, expenseID: String, newExpense: GroupExpense) throws {
+        let db = Firestore.firestore()
+        let docRef = db.collection("groups")
+            .document(groupID)
+            .collection("expenses")
+            .document(expenseID)
+        try docRef.setData(from: newExpense)
+    }
+    
+    static func addGroupMember(groupID: String, memberID: String) async throws {
+        let db = Firestore.firestore()
+        try await db.collection("groups").document(groupID).updateData([
             "groupMembers": FieldValue.arrayUnion([memberID])
-        ]) { error in
-            completion(error)
-        }
+        ])
     }
     
-    static func changeGroupName(groupID: String, newName: String, completion: @escaping (Error?) -> Void) {
-        
+    static func changeGroupName(groupID: String, newName: String) async throws {
         let db = Firestore.firestore()
-        db.collection("groups").document(groupID).updateData([
+        try await db.collection("groups").document(groupID).updateData([
             "groupName": newName
-        ]) { error in
-            completion(error)
-        }
+        ])
     }
     
-    static func updateGroupBalance(groupID: String) {
-        // TODO: Fetch expenses from /group/{groupID}/expenses
+    static func updateGroupBalance(groupID: String) async throws {
+        let expenses = try await getGroupAllExpense(groupID:groupID)
         
+        var total:[String:Double]=[:]
+        
+        // calculate net balance for every one
+        for expense in expenses {
+            let paidBy = expense.paidBy
+            let amount = expense.amount
+            let splitBetween = expense.splitBetween
+            
+            total[paidBy,default:0]+=amount
+            
+            for (user,share) in splitBetween {
+                total[user,default: 0]-=share
+            }
+        }
+        
+        // split into debtors (negative amount) and creditors (positive amount)
+        let tuple:[(Double, String)]=total.map{(name, balance) in (balance, name)}
+        
+        var debtors = tuple.filter { $0.0 < 0 }.sorted(by: <) // ascending
+        var creditors = tuple.filter { $0.0 > 0 }.sorted(by: >) // descending
+        
+        // simply who owns who how much
+        var balance: [String: [String: Double]]=[:]
+        
+        while(!debtors.isEmpty){
+            var debtorName = debtors[0].1
+            var creditorName = creditors[0].1
+            
+            var debtorsOwnAmount = debtors[0].0
+            var creditorReceivable = creditors[0].0
+            
+            
+            if(creditorReceivable<(-debtorsOwnAmount)){
+                if balance[debtorName] == nil {
+                    balance[debtorName] = [:]
+                }
+                balance[debtorName]![creditorName] = creditorReceivable
+                
+                debtors[0].0+=creditorReceivable
+                creditors.remove(at: 0)
+            }
+            else if (creditorReceivable==(-debtorsOwnAmount)){
+                if balance[debtorName] == nil {
+                    balance[debtorName] = [:]
+                }
+                balance[debtorName]![creditorName] = creditorReceivable
+                
+                debtors.remove(at: 0)
+                creditors.remove(at: 0)
+                
+            }
+            else if (creditorReceivable>(-debtorsOwnAmount)){
+                if balance[debtorName] == nil {
+                    balance[debtorName] = [:]
+                }
+                balance[debtorName]![creditorName] = -debtorsOwnAmount
+                creditors[0].0+=debtorsOwnAmount
+                debtors.remove(at: 0)
+            }
+            
+        }
+        
+        // update balace field in group collection
+        var flatBalance: [String: Double] = [:]
+
+        for (debtor, creditors) in balance {
+            for (creditor, amount) in creditors {
+                let key = "\(debtor)_to_\(creditor)"
+                flatBalance[key] = amount
+            }
+        }
+        let db=Firestore.firestore()
+        try await db.collection("groups").document(groupID).setData(["balance": flatBalance])
     }
+    
 }

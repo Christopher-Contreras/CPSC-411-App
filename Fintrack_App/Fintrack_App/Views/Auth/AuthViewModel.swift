@@ -19,8 +19,6 @@ class AuthViewModel: ObservableObject {
         self.isAuthenticated = Auth.auth().currentUser != nil
     }
     
-    
-    
     func login(email: String, password: String) async throws{
         
         // Skipped calling firebase in preview
@@ -39,8 +37,6 @@ class AuthViewModel: ObservableObject {
         }
         
     }
-    
-    
     
     func signup(email: String, password: String, userName: String) async throws {
         
@@ -61,12 +57,8 @@ class AuthViewModel: ObservableObject {
                 email: email, userName: userName, group: []
             )
             
-            UserService.addUser(user: newUser) {
-                error in
-                if let error = error {
-                    print("Faile to add new user: \(error)")
-                }
-            }
+            try UserService.addUser(user: newUser)
+            
             
         }
         catch{
@@ -84,7 +76,6 @@ class AuthViewModel: ObservableObject {
         }
     }
 }
-
 
 extension ProcessInfo {
     var isPreview: Bool {

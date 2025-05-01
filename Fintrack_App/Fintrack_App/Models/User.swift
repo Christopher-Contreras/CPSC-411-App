@@ -15,5 +15,5 @@ struct User: Codable, Identifiable {
     var userName: String
     var group: [String] = [] // groupIDs
     var createdAt: Timestamp? = nil
-    // contains subcollection UserExpense
+    // contains subcollection expenses
 }

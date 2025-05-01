@@ -9,10 +9,11 @@ import Foundation
 import FirebaseFirestore
 
 struct GroupExpense: Codable, Hashable {
+    @DocumentID var id: String? = nil
+    
     var description: String
     var amount: Double
-    var paidBy: String // userID
-    var splitBetween: [String] // userIDs
-    var splitAmounts: [String: Double]
+    var paidBy: String // userName
+    var splitBetween: [String: Double] // userNames
 
 }
