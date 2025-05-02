@@ -75,6 +75,8 @@ struct GroupService {
             }
         }
         
+        print(total)
+        
         // split into debtors (negative amount) and creditors (positive amount)
         let tuple:[(Double, String)]=total.map{(name, balance) in (balance, name)}
         
@@ -85,11 +87,11 @@ struct GroupService {
         var balance: [String: [String: Double]]=[:]
         
         while(!debtors.isEmpty){
-            var debtorName = debtors[0].1
-            var creditorName = creditors[0].1
+            let debtorName = debtors[0].1
+            let creditorName = creditors[0].1
             
-            var debtorsOwnAmount = debtors[0].0
-            var creditorReceivable = creditors[0].0
+            let debtorsOwnAmount = debtors[0].0
+            let creditorReceivable = creditors[0].0
             
             
             if(creditorReceivable<(-debtorsOwnAmount)){
@@ -131,8 +133,20 @@ struct GroupService {
                 flatBalance[key] = amount
             }
         }
-        let db=Firestore.firestore()
-        try await db.collection("groups").document(groupID).setData(["balance": flatBalance])
+        
+        print(balance)
+        print(flatBalance)
+        
+        if flatBalance.isEmpty {
+                print("flatBalance is empty — no balance will be written.")
+            } else {
+                let db=Firestore.firestore()
+                try await db.collection("groups").document(groupID).updateData([
+                    "balance": flatBalance
+                ])
+            }
+        
+        
     }
     
 }

@@ -14,11 +14,27 @@
 		7A7530B32D95E688000815DA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 7A7530B22D95E688000815DA /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7A072C1D2DC4725500984263 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A75308E2D93414F000815DA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A7530952D93414F000815DA;
+			remoteInfo = Fintrack_App;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		7A072C192DC4725500984263 /* Fintrack_AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Fintrack_AppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A7530962D93414F000815DA /* Fintrack_App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fintrack_App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		7A072C1A2DC4725500984263 /* Fintrack_AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Fintrack_AppTests;
+			sourceTree = "<group>";
+		};
 		7A7530982D93414F000815DA /* Fintrack_App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Fintrack_App;
@@ -27,6 +43,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7A072C162DC4725500984263 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7A7530932D93414F000815DA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				7A7530982D93414F000815DA /* Fintrack_App */,
+				7A072C1A2DC4725500984263 /* Fintrack_AppTests */,
 				7A7530972D93414F000815DA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				7A7530962D93414F000815DA /* Fintrack_App.app */,
+				7A072C192DC4725500984263 /* Fintrack_AppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +86,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7A072C182DC4725500984263 /* Fintrack_AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A072C1F2DC4725500984263 /* Build configuration list for PBXNativeTarget "Fintrack_AppTests" */;
+			buildPhases = (
+				7A072C152DC4725500984263 /* Sources */,
+				7A072C162DC4725500984263 /* Frameworks */,
+				7A072C172DC4725500984263 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7A072C1E2DC4725500984263 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7A072C1A2DC4725500984263 /* Fintrack_AppTests */,
+			);
+			name = Fintrack_AppTests;
+			packageProductDependencies = (
+			);
+			productName = Fintrack_AppTests;
+			productReference = 7A072C192DC4725500984263 /* Fintrack_AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		7A7530952D93414F000815DA /* Fintrack_App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7A7530A42D934152000815DA /* Build configuration list for PBXNativeTarget "Fintrack_App" */;
@@ -95,9 +143,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					7A072C182DC4725500984263 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 7A7530952D93414F000815DA;
+					};
 					7A7530952D93414F000815DA = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -121,11 +173,19 @@
 			projectRoot = "";
 			targets = (
 				7A7530952D93414F000815DA /* Fintrack_App */,
+				7A072C182DC4725500984263 /* Fintrack_AppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7A072C172DC4725500984263 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7A7530942D93414F000815DA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -136,6 +196,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7A072C152DC4725500984263 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7A7530922D93414F000815DA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -145,7 +212,51 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		7A072C1E2DC4725500984263 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A7530952D93414F000815DA /* Fintrack_App */;
+			targetProxy = 7A072C1D2DC4725500984263 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		7A072C202DC4725500984263 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "-11-group-4.Fintrack-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fintrack_App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Fintrack_App";
+			};
+			name = Debug;
+		};
+		7A072C212DC4725500984263 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "-11-group-4.Fintrack-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fintrack_App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Fintrack_App";
+			};
+			name = Release;
+		};
 		7A7530A22D934152000815DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -324,6 +435,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7A072C1F2DC4725500984263 /* Build configuration list for PBXNativeTarget "Fintrack_AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A072C202DC4725500984263 /* Debug */,
+				7A072C212DC4725500984263 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7A7530912D93414F000815DA /* Build configuration list for PBXProject "Fintrack_App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
