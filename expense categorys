@@ -1,0 +1,43 @@
+import Foundation
+
+enum ExpenseCategory: String, CaseIterable {
+    case food
+    case transportation
+    case entertainment
+    case utilities
+    case miscellaneous
+}
+
+struct Expense {
+    let amount: Decimal
+    let category: ExpenseCategory
+    let date: Date
+    let note: String
+}
+
+class ExpenseTracker {
+    private var expenses: [Expense] = []
+    
+    func addExpense(amount: Decimal, category: ExpenseCategory, note: String = "") {
+        let newExpense = Expense(amount: amount, category: category, date: Date(), note: note)
+        expenses.append(newExpense)
+    }
+    
+    func totalExpense() -> Decimal {
+        return expenses.reduce(Decimal(0)) { $0 + $1.amount }
+    }
+    
+    func totalByCategory() -> [ExpenseCategory: Decimal] {
+        var totals: [ExpenseCategory: Decimal] = [:]
+        for category in ExpenseCategory.allCases {
+            totals[category] = expenses
+                .filter { $0.category == category }
+                .reduce(Decimal(0)) { $0 + $1.amount }
+        }
+        return totals
+    }
+    
+    func allExpenses() -> [Expense] {
+        return expenses
+    }
+}
