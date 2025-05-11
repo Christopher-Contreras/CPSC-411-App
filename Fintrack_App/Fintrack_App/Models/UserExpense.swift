@@ -7,6 +7,7 @@
 
 import FirebaseFirestore
 
+// subcollection of users
 struct UserExpense: Codable {
     @DocumentID var id: String? = nil
     var amount: Double

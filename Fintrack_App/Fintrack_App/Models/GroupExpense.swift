@@ -8,12 +8,13 @@
 import Foundation
 import FirebaseFirestore
 
+// subcollection of group
 struct GroupExpense: Codable, Hashable {
     @DocumentID var id: String? = nil
     
     var description: String
     var amount: Double
     var paidBy: String // userName
-    var splitBetween: [String: Double] // userNames
+    var splitBetween: [String: Double] // userNames:amount
 
 }
