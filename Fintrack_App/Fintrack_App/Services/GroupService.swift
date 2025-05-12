@@ -1,38 +1,32 @@
 import Foundation
 import FirebaseFirestore
 
-// handle firebase call to add a group or edit fields in a group to firebase
-// it first store data locally and then sync to firebase
 struct GroupService {
     
-    // Adds a new group document to the "groups" collection in Firestore
     static func addGroup(group: Group) throws {
         let db = Firestore.firestore()
         let docRef = db.collection("groups").document()
         try docRef.setData(from: group)
     }
     
-    // Adds a new group expense document under the "groupExpenses" subcollection
     static func addGroupExpense(groupID: String, expense: GroupExpense) throws {
         let db = Firestore.firestore()
-        let docRef = db.collection("groups").document(groupID).collection("groupExpenses").document()
+        let docRef = db.collection("groups").document(groupID).collection("expenses").document()
         try docRef.setData(from: expense)
     }
     
-    // delete a group expense document under the "groupExpenses" subcollection
     static func deleteGroupExpense(groupID: String, expenseID: String) async throws {
         let db = Firestore.firestore()
         try await db.collection("groups")
             .document(groupID)
-            .collection("groupExpenses")
+            .collection("expenses")
             .document(expenseID)
             .delete()
     }
     
-    // return a list with all expense document in a specific group
     static func getGroupAllExpense(groupID: String) async throws -> [GroupExpense] {
         let db = Firestore.firestore()
-        let collectionRef = db.collection("groups").document(groupID).collection("groupExpenses")
+        let collectionRef = db.collection("groups").document(groupID).collection("expenses")
         let snapshot = try await collectionRef.getDocuments()
         let expenses = try snapshot.documents.compactMap { document in
             try document.data(as: GroupExpense.self)
@@ -40,25 +34,22 @@ struct GroupService {
         return expenses
     }
     
-    // update a group expense document for a specific group by entirely overwrite the old one with all fields
     static func updateGroupExpense(groupID: String, expenseID: String, newExpense: GroupExpense) throws {
         let db = Firestore.firestore()
         let docRef = db.collection("groups")
             .document(groupID)
-            .collection("groupExpenses")
+            .collection("expenses")
             .document(expenseID)
         try docRef.setData(from: newExpense)
     }
     
-    // add a new group member's id and name to the groupMember field
-    static func addGroupMember(groupID: String, memberID: String, memberName: String) async throws {
+    static func addGroupMember(groupID: String, memberID: String) async throws {
         let db = Firestore.firestore()
         try await db.collection("groups").document(groupID).updateData([
-            "groupMembers": FieldValue.arrayUnion([[memberID:memberName]])
+            "groupMembers": FieldValue.arrayUnion([memberID])
         ])
     }
     
-    // update the groupName field in a group
     static func changeGroupName(groupID: String, newName: String) async throws {
         let db = Firestore.firestore()
         try await db.collection("groups").document(groupID).updateData([
@@ -66,8 +57,6 @@ struct GroupService {
         ])
     }
     
-    // update total balance field [stirng: Double]: ['A to B': amount]
-    // call when add, delete, or update a group expense
     static func updateGroupBalance(groupID: String) async throws {
         let expenses = try await getGroupAllExpense(groupID:groupID)
         

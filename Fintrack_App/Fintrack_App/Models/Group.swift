@@ -8,7 +8,6 @@
 import Foundation
 import FirebaseFirestore
 
-// collection model of groups
 struct Group: Codable, Identifiable {
     @DocumentID var id: String? = nil
 
@@ -17,6 +16,5 @@ struct Group: Codable, Identifiable {
     var balance: [String: Double] // ["A to B" : amount]
     
     var createdAt: Timestamp? = nil
-    
-    // contains subcollection GroupExpense
+    // contains subcollection expenses
 }

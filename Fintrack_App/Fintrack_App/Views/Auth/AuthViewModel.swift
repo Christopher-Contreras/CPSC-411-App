@@ -10,8 +10,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-// Login/Signup UI logic
-@MainActor
+
 class AuthViewModel: ObservableObject {
     @Published var isAuthenticated = false
     

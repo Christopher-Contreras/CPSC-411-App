@@ -8,7 +8,6 @@
 import SwiftUI
 import FirebaseAuth
 
-// Login/Signup UI
 struct AuthView: View {
     @State var isLoggedIn: Bool = true
     @State var loginPage: Bool = true
