@@ -71,9 +71,9 @@ struct AddGroupExpenseView: View {
             let share = total / Double(members.count)
             let split: [String: Double] = Dictionary(uniqueKeysWithValues: members.map { ($0, share) })
 
-            let expense = GroupExpense(description: description, amount: total, createdBy: paidBy, splitBetween: split)
+            let expense = GroupExpense(description: description, amount: total, paidBy: paidBy, splitBetween: split)
 
-            try await GroupService.addGroupExpense(groupID: group.id ?? "", expense: expense)
+            try GroupService.addGroupExpense(groupID: group.id ?? "", expense: expense)
             try await GroupService.updateGroupBalance(groupID: group.id ?? "")
 
             description = ""

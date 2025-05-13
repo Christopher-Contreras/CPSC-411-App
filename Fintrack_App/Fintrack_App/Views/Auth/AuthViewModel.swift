@@ -23,10 +23,10 @@ class AuthViewModel: ObservableObject {
     func login(email: String, password: String) async throws{
         
         // Skipped calling firebase in preview
-        guard !ProcessInfo().isPreview else {
-            print("Login skipped in preview.")
-            return
-        }
+//        guard !ProcessInfo().isPreview else {
+//            print("Login skipped in preview.")
+//            return
+//        }
         
         // log in
         do{

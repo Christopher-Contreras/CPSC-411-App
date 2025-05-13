@@ -53,7 +53,7 @@ struct CreateGroupView: View {
                         }
 
                         let group = Group(groupName: groupName, groupMembers: members, balance: [:])
-                        try await GroupService.addGroup(group: group)
+                        try GroupService.addGroup(group: group)
                         statusMessage = "Group created successfully!"
                         groupName = ""
                         memberEmails = ""

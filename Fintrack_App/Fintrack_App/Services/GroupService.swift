@@ -31,7 +31,7 @@ struct GroupService {
     
     // return a list with all expense document in a specific group
     // helper function for updateGroupBalance
-    private static func getGroupAllExpense(groupID: String) async throws -> [GroupExpense] {
+    static func getGroupAllExpense(groupID: String) async throws -> [GroupExpense] {
         let db = Firestore.firestore()
         let collectionRef = db.collection("groups").document(groupID).collection("groupExpenses")
         let snapshot = try await collectionRef.getDocuments()

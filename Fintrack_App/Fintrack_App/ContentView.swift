@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-           AuthView()
-            
+    @StateObject var authViewModel = AuthViewModel()
 
-            
+    var body: some View {
+        if authViewModel.isAuthenticated {
+            DashboardView()
+                .environmentObject(authViewModel)
+        } else {
+            AuthView()
+                .environmentObject(authViewModel)
         }
-        .padding()
     }
 }
 
-
-
-//#Preview {
-//    ContentView()
-//}
+#Preview {
+    ContentView()
+}

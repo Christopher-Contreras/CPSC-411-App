@@ -32,7 +32,7 @@ struct AddPersonalExpenseView: View {
                 let expense = UserExpense(amount: amountDouble, description: description)
                 Task {
                     do {
-                        try await UserService.addUserExpense(userID: uid, expense: expense)
+                        try UserService.addUserExpense(userID: uid, expense: expense)
                         showAlert = true
                     } catch {
                         print("Failed to add expense: \(error)")

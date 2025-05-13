@@ -12,17 +12,12 @@ import FirebaseAuth
 struct AuthView: View {
     @State var isLoggedIn: Bool = true
     @State var loginPage: Bool = true
-    @StateObject var authViewModel = AuthViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     
     var body: some View {
         
         VStack{
-            if (authViewModel.isAuthenticated) {
-                
-                // TODO: to the main app interface
-                Text("is authenticated")
-            }
-            else {
+            if (!authViewModel.isAuthenticated) {
                 if (loginPage){
                     LoginView(loginPage: $loginPage)
                 }
@@ -31,6 +26,7 @@ struct AuthView: View {
                 }
             }
         }
+        // TODO: delete
         .onAppear {
             Task {
                 try await authViewModel.logout()
@@ -66,8 +62,6 @@ struct LoginView: View {
                     do{
                         try await authViewModel.login(email: email, password: password)
                         loginPage = false
-                        print("Log in successed")
-                        // TODO: to the main app interface
                     }
                     catch
                     {

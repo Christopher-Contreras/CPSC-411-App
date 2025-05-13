@@ -10,6 +10,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseAuth
 
+@MainActor
 class DashboardViewModel: ObservableObject {
     @Published var userExpenses: [UserExpense] = []
     @Published var userGroups: [Group] = []
@@ -36,9 +37,9 @@ class DashboardViewModel: ObservableObject {
                         groups.append(group)
                     }
                 }
-                DispatchQueue.main.async {
+                
                     self.userGroups = groups
-                }
+                
             }
         } catch {
             print("Failed to load user groups: \(error)")
