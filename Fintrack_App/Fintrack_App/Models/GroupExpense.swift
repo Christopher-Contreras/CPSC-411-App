@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 // subcollection of group
-struct GroupExpense: Codable, Hashable, Identifiable {
+struct GroupExpense: Codable, Hashable {
     @DocumentID var id: String? = nil
     
     var description: String
