@@ -8,12 +8,14 @@
 import Foundation
 import FirebaseFirestore
 
+// collection model of users
 struct User: Codable, Identifiable {
     @DocumentID var id: String? = nil
 
     var email: String
     var userName: String
     var group: [String] = [] // groupIDs
-    var createdAt: Timestamp? = nil
-    // contains subcollection expenses
+    @ServerTimestamp var createdAt: Timestamp?
+    
+    // contains subcollection UserExpense
 }

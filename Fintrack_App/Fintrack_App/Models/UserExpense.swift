@@ -7,8 +7,11 @@
 
 import FirebaseFirestore
 
-struct UserExpense: Codable {
+// subcollection of users
+struct UserExpense: Codable, Hashable {
     @DocumentID var id: String? = nil
     var amount: Double
     var description: String
+    
+    @ServerTimestamp var createdAt: Timestamp?
 }
