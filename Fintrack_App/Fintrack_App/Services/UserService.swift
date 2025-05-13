@@ -51,5 +51,13 @@ struct UserService {
         let docRef = db.collection("users").document(userID).collection("userExpenses").document(expenseID)
         try docRef.setData(from: expense)
     }
+    
+    static func addGroupID(groupID: String, userID: String) throws {
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(userID)
+        docRef.updateData([
+                "groups": FieldValue.arrayUnion([groupID])
+            ])
+    }
 }
 

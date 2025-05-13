@@ -37,7 +37,8 @@ struct GroupListView: View {
         do {
             let userDoc = try await db.collection("users").document(uid).getDocument()
             let groupIDs = userDoc.get("groups") as? [String] ?? []
-
+            
+            print("groups: \(groupIDs)")
             var loadedGroups: [Group] = []
             for groupID in groupIDs {
                 let groupDoc = try await db.collection("groups").document(groupID).getDocument()

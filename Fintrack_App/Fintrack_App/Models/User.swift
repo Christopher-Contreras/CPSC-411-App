@@ -14,7 +14,7 @@ struct User: Codable, Identifiable {
 
     var email: String
     var userName: String
-    var group: [String] = [] // groupIDs
+    var groups: [String] = [] // groupIDs
     @ServerTimestamp var createdAt: Timestamp?
     
     // contains subcollection UserExpense

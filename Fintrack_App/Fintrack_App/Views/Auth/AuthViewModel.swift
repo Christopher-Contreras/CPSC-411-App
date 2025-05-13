@@ -55,7 +55,7 @@ class AuthViewModel: ObservableObject {
             
             // add to user collection
             let newUser = User(
-                email: email, userName: userName, group: []
+                email: email, userName: userName, groups: []
             )
             
             try UserService.addUser(user: newUser)

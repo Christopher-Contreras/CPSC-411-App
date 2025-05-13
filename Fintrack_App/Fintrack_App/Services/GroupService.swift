@@ -6,10 +6,12 @@ import FirebaseFirestore
 struct GroupService {
     
     // Adds a new group document to the "groups" collection in Firestore
-    static func addGroup(group: Group) throws {
+    // return the new group's id
+    static func addGroup(group: Group) throws -> String {
         let db = Firestore.firestore()
         let docRef = db.collection("groups").document()
         try docRef.setData(from: group)
+        return docRef.documentID
     }
     
     // Adds a new group expense document under the "groupExpenses" subcollection
@@ -55,7 +57,7 @@ struct GroupService {
     static func addGroupMember(groupID: String, memberID: String, memberName: String) async throws {
         let db = Firestore.firestore()
         try await db.collection("groups").document(groupID).updateData([
-            "groupMembers": FieldValue.arrayUnion([[memberID:memberName]])
+            "groupMembers.\(memberID)": memberName
         ])
     }
     

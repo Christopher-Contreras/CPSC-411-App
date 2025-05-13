@@ -73,6 +73,7 @@ struct AddGroupExpenseView: View {
 
             let expense = GroupExpense(description: description, amount: total, paidBy: paidBy, splitBetween: split)
 
+            
             try GroupService.addGroupExpense(groupID: group.id ?? "", expense: expense)
             try await GroupService.updateGroupBalance(groupID: group.id ?? "")
 
