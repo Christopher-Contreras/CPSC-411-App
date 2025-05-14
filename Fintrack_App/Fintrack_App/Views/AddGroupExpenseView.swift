@@ -35,7 +35,7 @@ struct AddGroupExpenseView: View {
                     await addGroupExpense()
                 }
             }) {
-                Text("Add Group Expense")
+                Text("Add Group Expense (Split Equally)")
                     .padding()
                     .background(Color.blue)
                     .foregroundColor(.white)
@@ -46,13 +46,13 @@ struct AddGroupExpenseView: View {
         .alert(isPresented: $showSuccessAlert) {
             Alert(
                 title: Text("Expense Added"),
-                message: Text("The expense was successfully added."),
+                message: Text("The expense was successfully split equally among all members."),
                 primaryButton: .default(Text("Back to Group")) {
                     presentationMode.wrappedValue.dismiss()
                     onExpenseAdded?()
                 },
                 secondaryButton: .default(Text("Go to Dashboard")) {
-                    // Navigate to dashboard here if needed
+                    // Navigation logic here
                 }
             )
         }
@@ -67,16 +67,25 @@ struct AddGroupExpenseView: View {
         }
 
         do {
-            let members = Array(group.groupMembers.keys)
-            let share = total / Double(members.count)
-            let split: [String: Double] = Dictionary(uniqueKeysWithValues: members.map { ($0, share) })
-
-            let expense = GroupExpense(description: description, amount: total, paidBy: paidBy, splitBetween: split)
-
+            // Calculate equal split
+            let splitAmount = total / Double(group.groupMembers.count)
+            var splitBetween = [String: Double]()
             
+            for (userId, userName) in group.groupMembers {
+                splitBetween[userId] = splitAmount
+            }
+
+            let expense = GroupExpense(
+                description: description,
+                amount: total,
+                paidBy: paidBy,
+                splitBetween: splitBetween
+            )
+
             try GroupService.addGroupExpense(groupID: group.id ?? "", expense: expense)
             try await GroupService.updateGroupBalance(groupID: group.id ?? "")
 
+            // Reset fields
             description = ""
             amount = ""
             showSuccessAlert = true
@@ -86,8 +95,11 @@ struct AddGroupExpenseView: View {
     }
 }
 
-
 #Preview {
-    AddGroupExpenseView(group: Group(id: "mockGroupId", groupName: "Test Group", groupMembers: ["uid1": "Alice", "uid2": "Bob"], balance: [:]))
-    
+    AddGroupExpenseView(group: Group(
+        id: "mockGroupId",
+        groupName: "Test Group",
+        groupMembers: ["uid1": "Alice", "uid2": "Bob"],
+        balance: [:]
+    ))
 }
