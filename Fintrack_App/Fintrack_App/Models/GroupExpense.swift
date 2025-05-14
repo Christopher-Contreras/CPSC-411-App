@@ -14,8 +14,8 @@ struct GroupExpense: Codable, Hashable {
     
     var description: String
     var amount: Double
-    var paidBy: String // userName
-    var splitBetween: [String: Double] // userNames:amount
+    var paidBy: String // userID
+    var splitBetween: [String: Double] // userID:amount
     
     @ServerTimestamp var createdAt: Timestamp?
 
