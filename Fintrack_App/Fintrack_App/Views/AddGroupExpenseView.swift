@@ -135,7 +135,7 @@ struct AddGroupExpenseView: View {
     
     private func addGroupExpense() async {
         guard let paidByID = paidBy,
-              let paidByName = group.groupMembers[paidByID],
+//              let paidByName = group.groupMembers[paidByID],
               let total = Double(amount),
               !description.isEmpty else {
             print("Invalid input: missing description, amount, or payer")

@@ -11,12 +11,15 @@ import FirebaseAuth
 
 
 struct GroupDetailView: View {
-    var group: Group
+    @State var group: Group
     @State private var members: [String] = []
     @State private var expenses: [GroupExpense] = []
     @State private var showAddMemberView = false
     @State private var showAddExpenseView = false
     @State private var navigateToAddExpense = false
+    
+    @State private var selectedExpense:GroupExpense? = nil
+    @State private var showExpenseEditSheet: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -106,6 +109,15 @@ struct GroupDetailView: View {
                             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                     )
                     .padding(.vertical, 4)
+                    .onLongPressGesture{
+                        selectedExpense=expense
+//                        showExpenseEditSheet=true
+                    }
+                    .onChange(of: selectedExpense) { newValue in
+                        if newValue != nil {
+                            showExpenseEditSheet = true
+                        }
+                    }
                 }
             }
             .frame(maxHeight: .infinity)
@@ -116,6 +128,23 @@ struct GroupDetailView: View {
         .padding()
         .onAppear {
             loadGroupDetails()
+        }
+        .sheet(isPresented: $showExpenseEditSheet) {
+            if let expense = selectedExpense {
+                EditExpenseSheet(
+                    expense: expense,
+                    group: group,
+                    groupID: group.id ?? "",
+                    onComplete: {
+                        Task {
+                            await loadGroupDetails()
+                            showExpenseEditSheet = false
+                        }
+                    }
+                )
+            } else {
+                ProgressView("Loading...")
+            }
         }
     }
     
@@ -129,10 +158,16 @@ struct GroupDetailView: View {
                 
                 let groupRef = Firestore.firestore().collection("groups").document(groupID)
                 let groupSnapshot = try await groupRef.getDocument()
-                if let groupData = groupSnapshot.data(),
-                   let groupMembers = groupData["groupMembers"] as? [String: String] {
-                    members = Array(groupMembers.values)
-                }
+                if let groupData = groupSnapshot.data() {
+                                if let groupMembers = groupData["groupMembers"] as? [String: String] {
+                                    members = Array(groupMembers.values)
+                                    group.groupMembers = groupMembers
+                                }
+
+                                if let balance = groupData["balance"] as? [String: Double] {
+                                    group.balance = balance
+                                }
+                            }
                 
                 expenses = try await GroupService.getGroupAllExpense(groupID: groupID)
             } catch {
