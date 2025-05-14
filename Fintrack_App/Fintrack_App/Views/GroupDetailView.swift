@@ -25,13 +25,13 @@ struct GroupDetailView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
             
-            Text("Members: \(members.joined(separator: ", "))")
+            Label("Members: \(members.joined(separator: ", "))", systemImage: "person.3.fill")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
             if !group.balance.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Total Balance:")
+                    Label("Total Balance", systemImage: "dollarsign.circle.fill")
                         .font(.headline)
                     
                     ScrollView{
@@ -51,15 +51,19 @@ struct GroupDetailView: View {
 
             
             HStack(spacing: 16) {
-                Button("Add Member") {
+                Button{
                     showAddMemberView = true
+                } label:{
+                    Label("Add Member", systemImage: "person.badge.plus")
                 }
                 .sheet(isPresented: $showAddMemberView) {
                     AddMemberView(group: group)
                 }
                 Spacer()
-                Button("Add Group Expense") {
+                Button {
                     showAddExpenseView = true
+                } label :{
+                    Label("Add Group Expense", systemImage: "plus.circle.fill")
                 }
                 .sheet(isPresented: $showAddExpenseView) {
                     AddGroupExpenseView(group: group) {
@@ -68,7 +72,7 @@ struct GroupDetailView: View {
                 }
             }
             
-            Text("Expenses:")
+            Label("Expenses", systemImage: "list.bullet.rectangle")
                 .font(.headline)
             ScrollView{
                 ForEach(expenses, id: \.id) { expense in
