@@ -25,8 +25,8 @@ struct GroupDetailView: View {
         VStack(alignment: .leading, spacing: 20) {
             
             Text(group.groupName)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+                .font(.largeTitle)
+                .fontWeight(.bold)
             
             Label("Members: \(members.joined(separator: ", "))", systemImage: "person.3.fill")
                 .font(.subheadline)
@@ -37,21 +37,24 @@ struct GroupDetailView: View {
                     Label("Total Balance", systemImage: "dollarsign.circle.fill")
                         .font(.headline)
                     
-                    ScrollView{
-                        ForEach(group.balance.sorted(by: { $0.key < $1.key }), id: \.key) { key, value in
-                            let parts = key.components(separatedBy: "_to_")
-                            let fromName = group.groupMembers[String(parts.first ?? "")] ?? "Unknown"
-                            let toName = group.groupMembers[String(parts.last ?? "")] ?? "Unknown"
-                            Text("\(fromName) → \(toName): $\(value, specifier: "%.2f")")
-                                .font(.subheadline)
-                        }
-                    }
+                    let balanceText = group.balance.sorted(by: { $0.key < $1.key }).compactMap { key, value -> String? in
+                        let parts = key.components(separatedBy: "_to_")
+                        guard parts.count == 2 else { return nil }
+                        let fromName = group.groupMembers[parts[0]] ?? "Unknown"
+                        let toName = group.groupMembers[parts[1]] ?? "Unknown"
+                        return "\(fromName) → \(toName): $\(String(format: "%.2f", value))"
+                    }.joined(separator: ", ")
+                    
+                    Text(balanceText)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.bottom, 8)
                 .frame(maxHeight: 65)
             }
             
-
+            
             
             HStack(spacing: 16) {
                 Button{
@@ -60,7 +63,10 @@ struct GroupDetailView: View {
                     Label("Add Member", systemImage: "person.badge.plus")
                 }
                 .sheet(isPresented: $showAddMemberView) {
-                    AddMemberView(group: group)
+                    AddMemberView(group: group){
+                        loadGroupDetails()
+                    }
+                    
                 }
                 Spacer()
                 Button {
@@ -111,7 +117,7 @@ struct GroupDetailView: View {
                     .padding(.vertical, 4)
                     .onLongPressGesture{
                         selectedExpense=expense
-//                        showExpenseEditSheet=true
+                        //                        showExpenseEditSheet=true
                     }
                     .onChange(of: selectedExpense) { newValue in
                         if newValue != nil {
@@ -159,15 +165,15 @@ struct GroupDetailView: View {
                 let groupRef = Firestore.firestore().collection("groups").document(groupID)
                 let groupSnapshot = try await groupRef.getDocument()
                 if let groupData = groupSnapshot.data() {
-                                if let groupMembers = groupData["groupMembers"] as? [String: String] {
-                                    members = Array(groupMembers.values)
-                                    group.groupMembers = groupMembers
-                                }
-
-                                if let balance = groupData["balance"] as? [String: Double] {
-                                    group.balance = balance
-                                }
-                            }
+                    if let groupMembers = groupData["groupMembers"] as? [String: String] {
+                        members = Array(groupMembers.values)
+                        group.groupMembers = groupMembers
+                    }
+                    
+                    if let balance = groupData["balance"] as? [String: Double] {
+                        group.balance = balance
+                    }
+                }
                 
                 expenses = try await GroupService.getGroupAllExpense(groupID: groupID)
             } catch {

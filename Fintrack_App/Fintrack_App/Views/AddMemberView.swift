@@ -13,6 +13,7 @@ struct AddMemberView: View {
     @State private var email = ""
     @State private var errorMessage = ""
     @Environment(\.dismiss) var dismiss
+    var onMemberAdded: (() -> Void)? = nil
 
     var body: some View {
         VStack(spacing: 20) {
@@ -84,6 +85,7 @@ struct AddMemberView: View {
             errorMessage = ""
 
             // Dismiss the view
+            onMemberAdded?()
             dismiss()
         } catch {
             errorMessage = "Error adding member: \(error.localizedDescription)"
