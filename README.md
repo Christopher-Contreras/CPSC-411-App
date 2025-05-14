@@ -1,57 +1,93 @@
-Fintrack - Group & Personal Expense Tracker 💸
 
-Fintrack is a modern iOS app that helps users track shared and personal expenses effortlessly — perfect for roommates, friends, or anyone managing group finances.
+# 📱 Fintrack - Group & Personal Expense Tracker
 
-📚 This app was developed as a final project for **CPSC 411 - iOS Development** at California State University, Fullerton.
+Fintrack is a modern iOS app designed to help users track shared and personal expenses — ideal for roommates, friends, or any group managing shared finances.
 
-🌟 Features
+---
 
-🔐 Authentication
-- Secure sign up and login using Firebase Authentication
-- Persists login session between app launches
+## 🎓 Course Information
 
-👥 Group Management
-- Create groups and give them custom names
-- Invite members by email (users must exist in the system)
-- Each group shows:
-  - A list of members
-  - A running balance of who owes whom
-  - A history of group expenses
+This app was developed as a final project for **CPSC 411 - iOS Development**  
+California State University, Fullerton
 
-💰 Group Expenses
-- Add shared expenses with:
-  - Description, amount, paid by, and members involved
-  - Option to split equally or select specific members
-- Edit or delete any group expense
-- Balances automatically update using net settlement logic
-- Long press on an expense to open edit/delete sheet
+---
 
-🧍 Personal Expenses
-- Track your own personal expenses
-- View all expenses in a simple list
-- Edit or delete personal expenses directly from the dashboard
+## 🔐 Authentication Features
 
-📊 Balance Summary
-- For each group, see a summary like:
-  Total Balance: Alice → Bob: $20.00, Charlie → Alice: $15.50
+- Secure sign up and login using **Firebase Authentication**
+- Session is persisted across app launches
 
-⚙️ Additional Features
-- Edit group name from the dashboard
-- Leave group by removing the group ID from your account
-- Logout securely
+---
 
-📱 Technologies Used
-- SwiftUI (modern declarative UI)
-- Firebase Authentication
-- Firestore Database
-- SF Symbols for UI icons
+## 👥 Group Management
 
-🚧 Planned Improvements
+- Create custom-named groups
+- Invite members by email (users must already be registered)
+- View group details:
+  - Member list
+  - Group expense history
+  - Running balance of who owes whom
+
+---
+
+## 💰 Group Expenses
+
+- Add expenses with:
+  - Description
+  - Amount
+  - Paid by
+  - Split with selected members or split equally
+- Edit or delete existing group expenses
+- Balances auto-update using net settlement logic
+- Long-press on an expense to open edit/delete sheet
+
+---
+
+## 🧍 Personal Expenses
+
+- Add, view, and manage your own personal expenses
+- Edit or delete directly from the dashboard
+
+---
+
+## 📊 Balance Summary
+
+- Compact, readable summary per group:
+  > Total Balance: Alice → Bob: $20.00, Charlie → Alice: $15.50
+
+---
+
+## ⚙️ Additional Features
+
+- Edit group name from dashboard
+- Leave group by removing group ID from user
+- Logout functionality
+
+---
+
+## 🧰 Tech Stack
+
+- **SwiftUI** – for modern declarative UI
+- **Firebase Authentication** – for secure login
+- **Firestore** – for real-time data sync
+- **SF Symbols** – for native iconography
+
+---
+
+## 🚧 Planned Improvements
+
 - Push notifications
 - Expense categories & filtering
-- User avatars or profile pictures
+- Profile pictures or avatars
 
-🛠 Setup
-- Clone the repo
-- Add your GoogleService-Info.plist from Firebase
-- Run in Xcode on simulator or real device
+---
+
+## 🛠 Setup Instructions
+
+1. Clone this repository
+2. Add your `GoogleService-Info.plist` file from Firebase Console
+3. Open in Xcode
+4. Run on simulator or physical device
+
+---
+
