@@ -59,5 +59,13 @@ struct UserService {
                 "groups": FieldValue.arrayUnion([groupID])
             ])
     }
+    
+    static func removeGroupID(groupID: String, userID: String) throws {
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(userID)
+        docRef.updateData([
+            "groups": FieldValue.arrayRemove([groupID])
+        ])
+    }
 }
 

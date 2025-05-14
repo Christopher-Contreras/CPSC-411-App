@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 // collection model of groups
-struct Group: Codable, Identifiable {
+struct Group: Codable, Identifiable, Equatable {
     @DocumentID var id: String? = nil
 
     var groupName: String

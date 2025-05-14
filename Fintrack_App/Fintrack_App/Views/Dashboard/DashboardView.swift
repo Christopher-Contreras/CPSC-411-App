@@ -12,6 +12,10 @@ struct DashboardView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @StateObject private var viewModel = DashboardViewModel()
     
+    @State private var selectedGroup: Group? = nil
+    @State private var selectedExpense: UserExpense? = nil
+    @State private var showGroupEditSheet = false
+    @State private var showExpenseEditSheet = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -39,15 +43,27 @@ struct DashboardView: View {
                     ScrollView {
                         VStack(spacing: 0) {
                             ForEach(viewModel.userGroups) { group in
-                                NavigationLink(destination: GroupDetailView(group: group)) {
-                                    HStack {
-                                        Text(group.groupName)
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                            .foregroundColor(.gray)
+                                HStack {
+                                    NavigationLink(destination: GroupDetailView(group: group)) {
+                                        HStack {
+                                            Text(group.groupName)
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .foregroundColor(.gray)
+                                        }
+                                        .padding(.vertical, 8)
+                                        .padding(.horizontal, 10)
                                     }
-                                    .padding(.vertical, 8)
-                                    .padding(.horizontal, 10)
+
+                                    Button(action: {
+                                        selectedGroup = group
+                                        
+                                    }) {
+                                        Image(systemName: "ellipsis.circle")
+                                            .foregroundColor(.gray)
+                                            .imageScale(.large)
+                                    }
+                                    .padding(.trailing, 10)
                                 }
                                 Divider()
                             }
@@ -78,10 +94,23 @@ struct DashboardView: View {
                         VStack(spacing: 0) {
                             ForEach(viewModel.userExpenses, id: \.id) { expense in
                                 HStack {
-                                    Text(expense.description)
+                                    VStack(alignment: .leading) {
+                                        Text(expense.description)
+                                        Text("$\(expense.amount, specifier: "%.2f")")
+                                            .foregroundColor(.secondary)
+                                            .font(.caption)
+                                    }
                                     Spacer()
-                                    Text("$\(expense.amount, specifier: "%.2f")")
-                                        .foregroundColor(.secondary)
+                                    Button(action: {
+                                        selectedExpense = expense
+                                        
+                                    })
+                                    {
+                                        Image(systemName: "ellipsis.circle")
+                                            .foregroundColor(.gray)
+                                            .imageScale(.large)
+                                    }
+                                    .padding(.trailing, 10)
                                 }
                                 .padding(.vertical, 8)
                                 .padding(.horizontal, 10)
@@ -112,6 +141,36 @@ struct DashboardView: View {
             Task {
                 await viewModel.loadUserExpenses()
                 await viewModel.loadUserGroups()
+            }
+        }
+        .onChange(of: selectedExpense) { newValue in
+            if newValue != nil {
+                showExpenseEditSheet = true
+            }
+        }
+        .onChange(of: selectedGroup) { newValue in
+            if newValue != nil {
+                showGroupEditSheet = true
+            }
+        }
+        .sheet(isPresented: $showGroupEditSheet) {
+            if let group = selectedGroup {
+                EditGroupSheet(group: group) {
+                    Task {
+                        await viewModel.loadUserGroups()
+                        showGroupEditSheet = false
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showExpenseEditSheet) {
+            if let expense = selectedExpense, let userID = Auth.auth().currentUser?.uid {
+                EditPersonalExpenseSheet(expense: expense, userID: userID) {
+                    Task {
+                        await viewModel.loadUserExpenses()
+                        showExpenseEditSheet = false
+                    }
+                }
             }
         }
     }
