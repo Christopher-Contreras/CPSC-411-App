@@ -1,45 +1,54 @@
-//  DashboardView.swift
-//  Fintrack_App
-//
-//  Created by Snehal Chavan on 5/11/25.
-//
-
 import SwiftUI
 import FirebaseAuth
 import Firebase
 
 struct DashboardView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var colorSchemeManager: ColorSchemeManager  // ✅ NEW
+
     @StateObject private var viewModel = DashboardViewModel()
-    
     @State private var selectedGroup: Group? = nil
     @State private var selectedExpense: UserExpense? = nil
     @State private var showGroupEditSheet = false
     @State private var showExpenseEditSheet = false
-    
+
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .leading, spacing: 20) {
-                Text("Dashboard")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                
-                
+                HStack {
+                    Text("Dashboard")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+
+                    Spacer()
+
+                    VStack(spacing: 4) {
+                        Text("Dark Mode")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+
+                        Toggle("", isOn: $colorSchemeManager.isDarkMode)
+                            .labelsHidden()
+                            .toggleStyle(SwitchToggleStyle(tint: .blue))
+                            .scaleEffect(0.75)
+                    }
+                }
+
+
+
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Image(systemName: "person.3.fill")
                         Text("Your Groups")
                     }
                     .font(.headline)
-                    
+
                     NavigationLink(destination: CreateGroupView()) {
                         Label("Create Group", systemImage: "person.badge.plus")
                             .font(.subheadline)
                             .foregroundColor(.blue)
                     }
-                    
+
                     ScrollView {
                         VStack(spacing: 0) {
                             ForEach(viewModel.userGroups) { group in
@@ -57,7 +66,6 @@ struct DashboardView: View {
 
                                     Button(action: {
                                         selectedGroup = group
-                                        
                                     }) {
                                         Image(systemName: "ellipsis.circle")
                                             .foregroundColor(.gray)
@@ -71,25 +79,20 @@ struct DashboardView: View {
                     }
                     .frame(height: geometry.size.height * 0.3)
                 }
-                
-                
-                VStack(alignment: .leading, spacing: 12){
-                    
+
+                VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Image(systemName: "dollarsign.circle.fill")
                         Text("Your Expenses")
                     }
                     .font(.headline)
-                    
-                    
-                    
+
                     NavigationLink(destination: AddPersonalExpenseView()) {
                         Label("Add Personal Expense", systemImage: "plus.circle")
                             .font(.subheadline)
                             .foregroundColor(.blue)
                     }
-                    
-                    
+
                     ScrollView {
                         VStack(spacing: 0) {
                             ForEach(viewModel.userExpenses, id: \.id) { expense in
@@ -103,9 +106,7 @@ struct DashboardView: View {
                                     Spacer()
                                     Button(action: {
                                         selectedExpense = expense
-                                        
-                                    })
-                                    {
+                                    }) {
                                         Image(systemName: "ellipsis.circle")
                                             .foregroundColor(.gray)
                                             .imageScale(.large)
@@ -119,8 +120,9 @@ struct DashboardView: View {
                         }
                     }
                     .frame(height: geometry.size.height * 0.3)
+
                     Spacer()
-                    
+
                     Button("Logout") {
                         Task {
                             do {
@@ -133,7 +135,6 @@ struct DashboardView: View {
                     .foregroundColor(.blue)
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
-                
             }
         }
         .padding()
@@ -178,4 +179,6 @@ struct DashboardView: View {
 
 #Preview {
     DashboardView()
+        .environmentObject(AuthViewModel())
+        .environmentObject(ColorSchemeManager())  // ✅ Added for preview support
 }

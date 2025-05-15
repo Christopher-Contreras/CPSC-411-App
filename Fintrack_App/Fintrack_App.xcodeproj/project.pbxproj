@@ -12,6 +12,7 @@
 		7A7530AF2D95E688000815DA /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7A7530AE2D95E688000815DA /* FirebaseCrashlytics */; };
 		7A7530B12D95E688000815DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7A7530B02D95E688000815DA /* FirebaseFirestore */; };
 		7A7530B32D95E688000815DA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 7A7530B22D95E688000815DA /* FirebaseStorage */; };
+		860D2F212DD5ADD2004506CF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 860D2F202DD5ADD2004506CF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		7A072C192DC4725500984263 /* Fintrack_AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Fintrack_AppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A7530962D93414F000815DA /* Fintrack_App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fintrack_App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		860D2F202DD5ADD2004506CF /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -71,6 +73,7 @@
 				7A7530982D93414F000815DA /* Fintrack_App */,
 				7A072C1A2DC4725500984263 /* Fintrack_AppTests */,
 				7A7530972D93414F000815DA /* Products */,
+				860D2F202DD5ADD2004506CF /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -190,6 +193,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				860D2F212DD5ADD2004506CF /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

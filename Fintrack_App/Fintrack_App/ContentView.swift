@@ -1,19 +1,14 @@
-//
-//  ContentView.swift
-//  Fintrack_App
-//
-//  Created by csuftitan on 3/25/25.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var authViewModel = AuthViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var colorSchemeManager: ColorSchemeManager
 
     var body: some View {
         if authViewModel.isAuthenticated {
             DashboardView()
                 .environmentObject(authViewModel)
+                .environmentObject(colorSchemeManager)
         } else {
             AuthView()
                 .environmentObject(authViewModel)
@@ -23,4 +18,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AuthViewModel())
+        .environmentObject(ColorSchemeManager())
 }
