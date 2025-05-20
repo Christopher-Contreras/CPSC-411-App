@@ -91,3 +91,10 @@ California State University, Fullerton
 
 ---
 
+## Demo
+<img src="screenshots/auth.png" width="400" />
+<img src="screenshots/dashboard.png" width="400" />
+<img src="screenshots/group_detail_page.png" width="400" />
+<img src="screenshots/add_expense.png" width="400" />
+<img src="screenshots/edit_expense.png" width="400" />
+
